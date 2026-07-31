@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use bevy::input::mouse::{MouseMotion, MouseWheel};
 use std::f32::consts::PI;
 
 #[derive(Component)] //orbit camera marker
@@ -73,6 +74,7 @@ fn setup(
     commands.insert_resource(AmbientLight {
         color: Color::linear_rgb(0.85, 0.88, 0.95),
         brightness: 400.0,
+        ..default()
     });
 
     let grid_size = 20;
