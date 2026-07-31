@@ -124,7 +124,12 @@ fn setup(
         .spawn((
             Transform::from_xyz(0.0, 0.0, 0.0),
             Visibility::default(),
-            RotatingPlatform { speed: 0.3 },
+            RotatingPlatform { 
+            speed: 0.5,
+            angle: 0.0,
+            direction: 1.0,
+            max_angle: PI / 2.0,
+            },
         ))
         .id();
 
@@ -134,7 +139,7 @@ fn setup(
     let gun_entity = commands
         .spawn((
             SceneRoot(gun_scene),
-            Transform::from_xyz(0.0, 0.3, 0.0).with_scale(Vec3::splat(1.0)),
+            Transform::from_xyz(0.0, 0.3, 0.0).with_scale(Vec3::splat(0.002)),
         ))
         .id();
 
@@ -144,7 +149,7 @@ fn setup(
     let collar_entity = commands
         .spawn((
             SceneRoot(collar_scene),
-            Transform::from_xyz(0.0, 0.3, 0.0).with_scale(Vec3::splat(1.0)),
+            Transform::from_xyz(0.0, 0.3, 0.0).with_scale(Vec3::splat(0.002)),
         ))
         .id();
 
@@ -173,14 +178,26 @@ fn setup(
 
 #[derive(Component)]
 struct RotatingPlatform {
-    speed: f32,
+    speed: f32,      //rotation speed
+    angle: f32,      //angle
+    direction: f32,  //1-> clock -1 -> anticlock
+    max_angle: f32,  // Max rotation
 }
 
-fn auto_rotate_platform(time: Res<Time>, mut query: Query<(&RotatingPlatform, &mut Transform)>) {
-    for (platform, mut transform) in &mut query {
-        transform.rotate_y(platform.speed * time.delta_secs());
+fn auto_rotate_platform(time: Res<Time>, mut query: Query<(&mut RotatingPlatform, &mut Transform)>) {
+    for (mut platform, mut transform) in &mut query {
+        platform.angle += platform.direction * platform.speed * time.delta_secs();
+        if platform.angle > platform.max_angle {
+            platform.angle = platform.max_angle;
+            platform.direction = -1.0;
+        } else if platform.angle < -platform.max_angle {
+            platform.angle = -platform.max_angle;
+            platform.direction = 1.0;
+        }
+        transform.rotation = Quat::from_rotation_y(platform.angle);
     }
 }
+
 
 fn orbit_camera_system(
     mouse_button: Res<ButtonInput<MouseButton>>,
