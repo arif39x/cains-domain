@@ -1,11 +1,11 @@
 # Cain's Domain
 
-Cain's Domain is a Desktop Game
+A desktop game built with Rust.
 
-**Desktop Game**
+## Demo
 
-<video src="./asset/Demo.mp4" controls muted loop playsinline>
-  Your browser does not support the video tag. You can download/view it here: [Demo.mp4](./asset/Demo.mp4)
-</video>
+![Gameplay Demo](./asset/demo.gif)
 
-> **Under Construction:** Cain's Domain is currently in development.
+Full video: [Demo.mp4](./asset/Demo.mp4)
+
+> ** Under Construction:** Cain's Domain is currently in development.
